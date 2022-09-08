@@ -13,6 +13,7 @@ app.config['SECRET_KEY'] = '8aabed13502bfd634e0f338428fe0e59'
 # Ensure templates are auto-reloaded
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
+
 @app.route("/index")
 @app.route("/")
 def index():
@@ -41,9 +42,20 @@ def login():
     
     # User reaches via GET
     form = LoginForm()
+    if form.validate_on_submit():
+        if True:
+            flash('You have been successfully logged in!', 'success')
+            return redirect(url_for('index'))
+        else:
+            flash('Username and/or Password does not match :(', 'danger')
+
     return render_template('login.html', form=form)
 
 
+@app.route("/password_reset", methods=['GET', 'POST'])
+def password_reset():
+    flash('UNDER CONSTRUCTION', 'warning')
+    return render_template('index.html')
 
 
 
