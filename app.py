@@ -43,11 +43,11 @@ def login():
     # User reaches via GET
     form = LoginForm()
     if form.validate_on_submit():
-        if True:
+        if True: #TODO make database for accounts
             flash('You have been successfully logged in!', 'success')
             return redirect(url_for('index'))
         else:
-            flash('Username and/or Password does not match :(', 'danger')
+            flash('Username and/or Password do not match', 'danger')
 
     return render_template('login.html', form=form)
 
