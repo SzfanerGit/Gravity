@@ -28,7 +28,7 @@ def register():
     # User reaches via GET
     form = RegistrationForm()
     if form.validate_on_submit():
-        flash(f'Account for user: "{form.username.data}" sucessfully created!', 'sucess')
+        flash(f'Account for user: "{form.username.data}" sucessfully created!', 'success')
         return redirect(url_for('index'))
     return render_template('register.html', form=form)
 
