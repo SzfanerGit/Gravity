@@ -1,18 +1,7 @@
-import os
-
-from flask import Flask, url_for, flash, redirect, render_template, request, session
-from forms import RegistrationForm, LoginForm
-# from flask_session import Session
-from tempfile import mkdtemp
-from werkzeug.security import check_password_hash, generate_password_hash
-
-# Configure application
-app = Flask(__name__)
-app.config['SECRET_KEY'] = '8aabed13502bfd634e0f338428fe0e59'
-
-# Ensure templates are auto-reloaded
-app.config['TEMPLATES_AUTO_RELOAD'] = True
-
+from flask import url_for, flash, redirect, render_template, request
+from gravity import app
+from gravity.forms import RegistrationForm, LoginForm
+from gravity.database import User
 
 @app.route("/index")
 @app.route("/")
@@ -56,9 +45,3 @@ def login():
 def password_reset():
     flash('UNDER CONSTRUCTION', 'warning')
     return render_template('index.html')
-
-
-
-######################## Live changes for development ########################
-if __name__ == '__main__':
-    app.run(debug=True)
