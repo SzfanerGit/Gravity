@@ -1,8 +1,11 @@
-from flask import url_for, flash, redirect, render_template, request
-from gravity import app
+from flask import url_for, flash, redirect, render_template
+from gravity import app, db
 from gravity.forms import RegistrationForm, LoginForm
 from gravity.database import User
+from werkzeug.security import check_password_hash, generate_password_hash
 
+
+@app.route("/home")
 @app.route("/index")
 @app.route("/")
 def index():
@@ -11,28 +14,26 @@ def index():
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
-    # Form submit via POST
-    if request.method == 'POST':
-        pass
-    
-    # User reaches via GET
+    # request.form.get method is handled in forms.py by FlaskForm
     form = RegistrationForm()
+    # user subbmits form via POST
     if form.validate_on_submit():
-        flash(f'Account for user: "{form.username.data}" sucessfully created!', 'success')
-        return redirect(url_for('index'))
+        password_hash = generate_password_hash(form.password.data)
+        user = User(username=form.username.data, email=form.email.data, password=password_hash)
+        db.session.add(user)
+        db.session.commit()
+        flash(f'Hello "{form.username.data}"! You have sucessfully created your account. Please login', 'success')
+        return redirect(url_for('login'))
+    # User reached via GET
     return render_template('register.html', form=form)
 
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
-    # Form submit via POST
-    if request.method == 'POST':
-        pass
-    
-    # User reaches via GET
+    # request.form.get method is handled in forms.py by FlaskForm
     form = LoginForm()
     if form.validate_on_submit():
-        if True: #TODO make database for accounts
+        if True:
             flash('You have been successfully logged in!', 'success')
             return redirect(url_for('index'))
         else:
