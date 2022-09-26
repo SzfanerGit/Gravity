@@ -8,17 +8,21 @@ from flask_mail import Message
 
 
 @app.route("/home")
-@app.route("/index")
 @app.route("/")
-def index():
-    return render_template('index.html')
+def home():
+    return render_template('home.html')
+
+
+@app.route("/about")
+def about():
+    return render_template('about.html')
 
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     # Ensure user is not logged in
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('home'))
 
     # request.form.get method is handled in forms.py by FlaskForm
     form = RegistrationForm()
@@ -41,7 +45,7 @@ def register():
 def login():
     # Ensure user is not logged in
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('home'))
     
     # request.form.get method is handled in forms.py by FlaskForm
     # user subbmits form via POST
@@ -56,7 +60,7 @@ def login():
 
             # Redirect user back to the page they tried to acces but were requred to login
             next_page = request.args.get('next')
-            return redirect(next_page) if next_page else redirect(url_for('index'))
+            return redirect(next_page) if next_page else redirect(url_for('home'))
         else:
             flash('Username and/or Password do not match', 'danger')
 
@@ -67,7 +71,7 @@ def login():
 def logout():
     logout_user()
     flash('You have been logged out.', 'info')
-    return redirect(url_for('index'))
+    return redirect(url_for('home'))
 
 
 @app.route("/account")
@@ -93,7 +97,7 @@ If you did not make this request then simply ignore this email and no changes wi
 def password_reset_request():
     # Ensure user is not logged in
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('home'))
 
     # Sending password reset email
     form = RequestResetForm()
@@ -110,7 +114,7 @@ def password_reset_request():
 def reset_token(token):
     # Ensure user is not logged in
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('home'))
 
     # Ensure token is valid and non expired
     user = User.verify_reset_token(token)
