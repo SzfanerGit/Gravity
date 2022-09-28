@@ -26,9 +26,9 @@
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="collapse navbar-collapse" id="mynavbar">
+                    <div class="collapse navbar-collapse d-flex justify-content-between" id="mynavbar">
                         <!-- Left side links -->
-                        <ul class="navbar-nav mr-auto">
+                        <ul class="navbar-nav">
                             <li class="nav-item">
                                 <a class="nav-link active" href="{{ url_for('home') }}">Home</a>
                             </li>
@@ -37,7 +37,7 @@
                             </li>
                         </ul>
                         <!-- Right side links -->
-                        <ul class="navbar-nav d-flex justify-content-end">
+                        <ul class="navbar-nav">
                             {% if current_user.is_authenticated %}
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ url_for('account') }}">Account</a>
