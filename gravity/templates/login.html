@@ -47,13 +47,13 @@
         <div class="form-group py-3">
             {{ form.submit(class="btn btn-outline-info") }}
             <small class="text-muted">
-                <a class="ml-2" href="{{ url_for('password_reset_request') }}">Forgot Password?</a>      
+                <a class="ml-2" href="{{ url_for('users.password_reset_request') }}">Forgot Password?</a>      
             </small>
         </div>
     </form>
     <div class="border-top pt-3">
         <small class="text-muted">
-            New To Our Service? <a class="ml-2" href="{{ url_for('register') }}">Register</a>      
+            New To Our Service? <a class="ml-2" href="{{ url_for('users.register') }}">Register</a>      
         </small>
     </div>
 {% endblock main %}
