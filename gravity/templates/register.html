@@ -10,7 +10,7 @@
         {{ form.hidden_tag() }}
 
         <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Register Today!</legend>
+            <legend class="border-bottom border-dark mb-4">Register Today!</legend>
             <div class="form-group">
                 {{ form.username.label(class="form-control-label") }}
                 <!-- Handle messages to users about wrong information -->
@@ -68,11 +68,11 @@
                 {% endif %}
             </div>
         </fieldset>
-        <div class="form-group py-3">
+        <div class="form-group">
             {{ form.submit(class="btn btn-outline-info") }}
         </div>
     </form>
-    <div class="border-top pt-3">
+    <div class="border-top border-dark pt-3">
         <small class="text-muted">
             Already Have An Account? <a class="ml-2" href="{{ url_for('users.login') }}">Sign In</a>      
         </small>

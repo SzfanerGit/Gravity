@@ -10,7 +10,7 @@
         {{ form.hidden_tag() }}
 
         <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Log In</legend>
+            <legend class="border-bottom border-dark mb-4">Log In</legend>
             <div class="form-group">
                 {{ form.username.label(class="form-control-label") }}
                 <!-- Handle messages to users about wrong information -->
@@ -44,14 +44,14 @@
                 {{ form.remember.label(class="form-check-label") }}
             </div>
         </fieldset>
-        <div class="form-group py-3">
+        <div class="form-group">
             {{ form.submit(class="btn btn-outline-info") }}
-            <small class="text-muted">
+            <small class="text-muted px-2">
                 <a class="ml-2" href="{{ url_for('users.password_reset_request') }}">Forgot Password?</a>      
             </small>
         </div>
     </form>
-    <div class="border-top pt-3">
+    <div class="border-top border-dark pt-3">
         <small class="text-muted">
             New To Our Service? <a class="ml-2" href="{{ url_for('users.register') }}">Register</a>      
         </small>

@@ -1,0 +1,45 @@
+:root {
+    --btnColor: hsl(120, 85%, 45%);
+}
+
+body {
+    background-color: beige;
+    color: 	hsl(275, 50%, 15%);
+}
+
+a:link {
+    color: hsl(120, 100%, 25%);
+}
+
+a:visited {
+    color: hsl(120, 15%, 40%);
+}
+
+a:hover {
+    color: hsl(80, 100%, 25%);
+}
+
+/*nav a {
+    color: beige;
+}*/
+
+div.form-group {
+    margin: 10px 20px 10px 5px;
+}
+
+form .btn {
+    color: var(--btnColor);
+    border-color: var(--btnColor);
+}
+
+form .btn:hover {
+    background-color: var(--btnColor);
+    border-color: var(--btnColor);
+}
+
+.account-img {
+    height: 125px;
+    width: 125px;
+    margin-right: 20px;
+    margin-bottom: 16px;
+}

@@ -14,7 +14,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String, unique=True, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
-    image_file = db.Column(db.String(20), nullable=False, default='default_img.jpg')
+    image_file = db.Column(db.String(20), nullable=False, default='default.png')
 
     def get_reset_token(self, expire_sec=600):
         s = Serializer(current_app.config['SECRET_KEY'], expire_sec)

@@ -3,8 +3,8 @@ from flask_login import login_user, current_user, logout_user, login_required
 from werkzeug.security import check_password_hash, generate_password_hash
 from gravity import db
 from gravity.database import User
-from gravity.users.forms import RegistrationForm, LoginForm, ResetPasswordForm, RequestResetForm
-from gravity.users.utils import send_password_reset_email
+from gravity.users.forms import RegistrationForm, LoginForm, ResetPasswordForm, RequestResetForm, UpdateAccountForm
+from gravity.users.utils import send_password_reset_email, save_picture
 
 users = Blueprint('users', __name__)
 
@@ -65,17 +65,31 @@ def logout():
     return redirect(url_for('main.home'))
 
 
-@users.route("/account")
+@users.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
-    return render_template('account.html')
-
+    form = UpdateAccountForm()
+    if form.validate_on_submit():
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+            current_user.image_file = picture_file
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        db.session.commit()
+        flash('Your account has been updated!', 'success')
+        return redirect(url_for('users.account'))
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.email.data = current_user.email
+    image_file = url_for('static', filename='profile_pictures/' + current_user.image_file)
+    return render_template('account.html', form=form, image_file=image_file)
 
 
 @users.route("/password_reset", methods=['GET', 'POST'])
 def password_reset_request():
     # Ensure user is not logged in
-    if current_user.is_authenticated:
+    next_page = request.args.get('next')
+    if current_user.is_authenticated and not next_page:
         return redirect(url_for('main.home'))
 
     # Sending password reset email
@@ -90,7 +104,7 @@ def password_reset_request():
 
 
 @users.route("/password_reset/<token>", methods=['GET', 'POST'])
-def reset_token(token):
+def password_reset_token(token):
     # Ensure user is not logged in
     if current_user.is_authenticated:
         return redirect(url_for('main.home'))
@@ -110,4 +124,4 @@ def reset_token(token):
         flash(f'Your password has been reset. Please login', 'success')
         return redirect(url_for('users.login'))
 
-    return render_template('reset_token.html', form=form)
+    return render_template('password_reset_token.html', form=form)
