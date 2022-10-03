@@ -1,4 +1,5 @@
 from time import time
+import numpy as np
 
 
 def timer(func):
@@ -36,3 +37,18 @@ def timer(func):
         print('runtime of "' + func.__name__ + '":', time_str)
         return result
     return wrapper
+
+
+def rotationMatrix(axis, angle):
+    # create rotation matrix around specified axis and by given angle
+    
+    # normailse rotation axis vector
+    u = np.array(axis) / np.sqrt(np.dot(axis, axis))
+    # shorthands
+    ux, uy, uz = u[0], u[1], u[2]
+    c = np.cos(angle)
+    s = np.sin(angle)
+    matrix = np.array([[c + ux**2 * (1 - c), ux * uy * (1 - c) - uz * s, ux * uz * (1 - c) + uy * s],
+                       [uy * ux * (1 - c) + uz * s, c + uy**2 * (1 - c), uy * uz * (1 - c) - ux * s],
+                       [uz * ux * (1 - c) - uy * s, uz * uy * (1 - c) + ux * s, c + uz**2 * (1 - c)]])
+    return matrix
