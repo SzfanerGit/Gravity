@@ -1,6 +1,8 @@
 from time import time
 import numpy as np
 
+from __init__ import G
+
 
 def timer(func):
     '''
@@ -52,3 +54,39 @@ def rotationMatrix(axis, angle):
                        [uy * ux * (1 - c) + uz * s, c + uy**2 * (1 - c), uy * uz * (1 - c) - ux * s],
                        [uz * ux * (1 - c) - uy * s, uz * uy * (1 - c) + ux * s, c + uz**2 * (1 - c)]])
     return matrix
+
+
+def equation(t, y, central_body):
+    """Evaluate classical equation of motion for 2-body problem.
+    Frame of reference is inertial and centered on central body
+    for both position and velocity.
+    
+    scipy.integrate.solve_ivp requires diff. eqs. in this form
+    f(t, y) where in this example y = (pos123, vel123) (6 components)
+    """
+    # Gravitational parameter
+    u = G * central_body.mass
+    # position and velocity vector unpacking
+    r = y[:3]
+    v = y[3:]
+    r_mag = np.sqrt(np.dot(r, r))
+    # acceleration calculation
+    acc = - u * r / r_mag**3
+    # creating derrivative of y (r_dot = v, v_dot = acc)
+    y_dot = np.hstack((v, acc))
+
+    return y_dot
+
+
+def central_body_altitude(t, y, central_body, terminal=True):
+    """Height above central body surface. 
+    If there is no radius then it treats it as 0.
+
+    Terminate solve_ivp on collision.
+    """
+    r = y[:3]
+    r_mag = np.sqrt(np.dot(r, r))
+    try:
+        return r_mag - central_body.radius
+    except:
+        return r_mag

@@ -1,5 +1,6 @@
 import numpy as np
-from utils import rotationMatrix
+from helpers import rotationMatrix
+from __init__ import G
 
 def state_to_orbital(r_vect, v_vect, central_mass):
     # 0.standard gravitational parameter u
@@ -58,6 +59,15 @@ def state_to_orbital(r_vect, v_vect, central_mass):
 
 
 def orbital_to_state(a, e, i, Omega, omega, nu, central_mass):
+    '''
+    Derrives state vectors (position x, y, z and velocity v_x, v_y, v_z)
+    from Keplerian/orbital elements
+
+    has few flaws: does not work with some edge cases like
+    parabolic orbits
+
+    TODO need some testing and debuging, especially for velocity vect
+    '''
     # standard gravitational parameter
     u = G * central_mass
     # check ellipticity of an orbit
@@ -88,7 +98,7 @@ def orbital_to_state(a, e, i, Omega, omega, nu, central_mass):
         h = np.sqrt(u * a * (e**2 - 1)) * np.array([0, 0, 1])
     # parabola
     else:
-        pass
+        raise ValueError('e = 1 not supported')
 
     # 3D rotation matrices
     rot_omega = rotationMatrix([0, 0, 1], -omega)
