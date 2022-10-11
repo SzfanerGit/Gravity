@@ -2,6 +2,7 @@ from time import time
 import numpy as np
 
 from __init__ import G
+from transformations import state_to_orbital
 
 
 def timer(func):
@@ -41,21 +42,6 @@ def timer(func):
     return wrapper
 
 
-def rotationMatrix(axis, angle):
-    # create rotation matrix around specified axis and by given angle
-    
-    # normailse rotation axis vector
-    u = np.array(axis) / np.sqrt(np.dot(axis, axis))
-    # shorthands
-    ux, uy, uz = u[0], u[1], u[2]
-    c = np.cos(angle)
-    s = np.sin(angle)
-    matrix = np.array([[c + ux**2 * (1 - c), ux * uy * (1 - c) - uz * s, ux * uz * (1 - c) + uy * s],
-                       [uy * ux * (1 - c) + uz * s, c + uy**2 * (1 - c), uy * uz * (1 - c) - ux * s],
-                       [uz * ux * (1 - c) - uy * s, uz * uy * (1 - c) + ux * s, c + uz**2 * (1 - c)]])
-    return matrix
-
-
 def equation(t, y, central_body):
     """Evaluate classical equation of motion for 2-body problem.
     Frame of reference is inertial and centered on central body
@@ -90,3 +76,15 @@ def central_body_altitude(t, y, central_body, terminal=True):
         return r_mag - central_body.radius
     except:
         return r_mag
+
+
+def period(self, central_body):
+    a, e, _, _, _, _ = state_to_orbital(self.pos, self.vel, central_body.mass)
+
+    # hyperbolic and parabolic orbits have infinite periods
+    if e >= 1:
+        return None
+
+    # orbital period from kepler laws
+    T = 2 * np.pi * np.sqrt(a ** 3 / (G * central_body.mass))
+    return T

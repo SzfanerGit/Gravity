@@ -1,6 +1,21 @@
 import numpy as np
-from helpers import rotationMatrix
 from __init__ import G
+
+
+def rotationMatrix(axis, angle):
+    # create rotation matrix around specified axis and by given angle
+    
+    # normailse rotation axis vector
+    u = np.array(axis) / np.sqrt(np.dot(axis, axis))
+    # shorthands
+    ux, uy, uz = u[0], u[1], u[2]
+    c = np.cos(angle)
+    s = np.sin(angle)
+    matrix = np.array([[c + ux**2 * (1 - c), ux * uy * (1 - c) - uz * s, ux * uz * (1 - c) + uy * s],
+                       [uy * ux * (1 - c) + uz * s, c + uy**2 * (1 - c), uy * uz * (1 - c) - ux * s],
+                       [uz * ux * (1 - c) - uy * s, uz * uy * (1 - c) + ux * s, c + uz**2 * (1 - c)]])
+    return matrix
+
 
 def state_to_orbital(r_vect, v_vect, central_mass):
     # 0.standard gravitational parameter u
@@ -15,9 +30,12 @@ def state_to_orbital(r_vect, v_vect, central_mass):
     # 2. specific angular momentum h
     h_vect = np.cross(r_vect, v_vect)
     h = np.sqrt(np.dot(h_vect, h_vect))
-
+    
     # 3. inclination i
-    i = np.arccos(h_vect[2] / h)
+    try:
+        i = np.arccos(h_vect[2] / h)
+    except:
+        i = 0
 
     # 4. unit vector of the reference plane (z axis) K
     K_vect = np.array((0, 0, 1))
@@ -25,19 +43,31 @@ def state_to_orbital(r_vect, v_vect, central_mass):
     n_vect = np.cross(K_vect, h_vect)
     n = np.sqrt(np.dot(n_vect, n_vect))
     # Right Ascension of ascending node Omega
-    Omega = np.arccos(n_vect[0] / n)
+    try:
+        Omega = np.arccos(n_vect[0] / n)
+    except:
+        Omega = 3 / 2 * np.pi
     if n_vect[1] < 0: Omega = 2 * np.pi - Omega
 
     # 5. eccentricity vector of the orbit. The eccentricity vector has the magnitude of the eccentricity e
-    e_vect = (np.cross(v_vect, h_vect) / u) - (r_vect / r)
+    try:
+        e_vect = (np.cross(v_vect, h_vect) / u) - (r_vect / r)
+    except:
+        e_vect = [0, 0, 0]
     e = np.sqrt(np.dot(e_vect, e_vect))
 
     # 6. argument of periapsis omega
-    omega = np.arccos(np.dot(n_vect, e_vect) / (n * e))
+    try:
+        omega = np.arccos(np.dot(n_vect, e_vect) / (n * e))
+    except:
+        omega = 1 / 2 * np.pi
     if e_vect[2] < 0: omega = 2 * np.pi - omega
 
     # 7. true anomaly nu
-    nu = np.arccos(np.dot(r_vect / r, e_vect / e))
+    try:
+        nu = np.arccos(np.dot(r_vect / r, e_vect / e))
+    except:
+        nu = 0
     if v_r < 0: nu = 2 * np.pi - nu
 
     # if e == 0:
