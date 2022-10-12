@@ -5,5 +5,44 @@
 {% endblock title %}
 
 {% block main%}
-    <h1>Home page!</h1>
+    <div class="container">
+        <div class="row">
+            <h2>Usage</h2>
+            <p>Here goes usage description. It should not be too long but it might have a full paragrapg or two.</p>
+        </div>
+        <div class="row">
+            <div class="col-sm-10">
+
+            </div>
+            <div class="col-sm-2">
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Index</th>
+                            <th>Name</th>
+                            <th>Initial position</th>
+                            <th>Initial velocity</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in satelites %}
+                            <tr>
+                                <td>{{ index }}</td>
+                                <td>{{ name }}</td>
+                                <td>{{ pos_0 }}</td>
+                                <td>{{ vel_0 }}</td>
+                                <th>DeleteBtn</th>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div> 
+        </div>
+    </div>    
 {% endblock main %}

@@ -31,9 +31,6 @@ class Body:
         # Exeption
         if self.central_body is None or self.central_body.mass <= 0:
             raise RuntimeError("need central reference body with positive mass")
-        
-        # Gravitational parameter
-        u = G * self.central_body.mass
 
         # initial value
         y_0 = np.hstack((self.pos, self.vel))
@@ -42,7 +39,7 @@ class Body:
         t_0 = 0
         if eval_time is None:
             eval_time = period(self, self.central_body)
-            if eval_time is None: eval_time = 100_000
+            if eval_time is None: eval_time = 100_000_000
             eval_time *= orbits
             print(eval_time)
         t_f = t_0 + eval_time
@@ -82,12 +79,12 @@ class Body:
             ax = plt.axes(projection='3d')
             ax.plot_surface(X_c, Y_c, Z_c, color='green', alpha=0.5)
             # View angle
-            ax.view_init(30, 145)
+            ax.view_init(30, 45)
         else:
             ax = fig_ref
 
         # Orbit itself
-        ax.plot3D(r[:, 0], r[:, 1], r[:, 2], label="Orbit")
+        ax.plot3D(r[:, 0], r[:, 1], r[:, 2], label='Orbit')
 
         # Max, min and initial distance indicators
         ax.plot(*r[i_min], 'ro')
@@ -119,7 +116,7 @@ class Body:
         return f"{self.__class__.__name__}('{self.pos}', '{self.vel}')"
 
 
-def plot_satelites(sat_list: Iterable[object], view_angle: Iterable[float] = (25.5, -45), save=False):
+def plot_satelites(sat_list: Iterable[object], view_angle: Iterable[float] = (30, -45), save=False):
     central_body = sat_list[0].central_body
     for satelite in sat_list:
         if satelite.central_body is not central_body:
@@ -168,7 +165,12 @@ def plot_satelites(sat_list: Iterable[object], view_angle: Iterable[float] = (25
 # position Earth at the origin
 Earth = Body(mass=M_E, radius=R_E)
 
-Satelite1 = Body([R_E * 2, 0, 0], [0, 7, 0], central_body=Earth)
-Satelite2 = Body([0, R_E * 2, 0], [0, 0, 6], central_body=Earth)
-Satelite3 = Body([0, R_E * 2, R_E * 2], [0, 0, 6], central_body=Earth)
-plot_satelites([Satelite1, Satelite2, Satelite3])
+# Satelite1 = Body([R_E * 2, 0, 0], [0, 7, 0], central_body=Earth)
+# Satelite2 = Body([0, R_E * 2, 0], [0, 0, 6], central_body=Earth)
+# Satelite3 = Body([0, R_E * 2, R_E * 2], [0, 0, 6], central_body=Earth)
+# plot_satelites([Satelite1, Satelite2, Satelite3])
+
+# Sat1 = Body([10000, 0, 0], [0, 7.0, 0], central_body=Earth)
+# Sat1.plot()
+Sat2 = Body([0, 10000, 0], [2, 3, 5], central_body=Earth)
+Sat2.plot()

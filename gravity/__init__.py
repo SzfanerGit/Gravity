@@ -21,6 +21,14 @@ def create_app(config_class=Config):
     login_manager.init_app(app)
     mail.init_app(app)
 
+    '''# when adding tables is neededed:
+    import gravity.database
+    with app.app_context():
+        # WARNING!
+        #db.drop_all() # WARNING!
+        # WARNING!
+        db.create_all()'''
+
     # Get pages
     from gravity.main.routes import main
     from gravity.users.routes import users

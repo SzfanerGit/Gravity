@@ -4,7 +4,7 @@
 
 body {
     background-color: beige;
-    color: 	hsl(275, 50%, 15%);
+    color: hsl(275, 50%, 15%);
 }
 
 a:link {
@@ -42,4 +42,9 @@ form .btn:hover {
     width: 125px;
     margin-right: 20px;
     margin-bottom: 16px;
+}
+
+thead {
+    background-color: hsl(120, 15%, 40%);
+    color: white;
 }
