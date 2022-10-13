@@ -15,7 +15,8 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.png')
-    satelites = db.relationship('Satelite', backref='author', lazy=True)
+    satelites = db.relationship('Satelite', backref='owner', lazy=True)
+    plots = db.relationship('Plot', backref='author', lazy=True)
 
     def get_reset_token(self, expire_sec=600):
         s = Serializer(current_app.config['SECRET_KEY'], expire_sec)
@@ -36,11 +37,21 @@ class User(db.Model, UserMixin):
 
 class Satelite(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False, default='Satelite')
     # position and velocity have format 'x_val, y_val, z_val' as string,
     # need to convert them into int list or array before proper use
     pos_0 = db.Column(db.String, nullable=False)
     vel_0 = db.Column(db.String, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id') , nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self) -> str:
         return f"Satelite('{self.pos_0}', '{self.vel_0}', '{self.user_id}')"
+
+
+class Plot(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    plot_image = db.Column(db.String(20), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __repr__(self) -> str:
+        return f"Plot('{self.plot_image}', '{self.user_id}')"

@@ -1,8 +1,8 @@
 from time import time
 import numpy as np
 
-from __init__ import G
-from transformations import state_to_orbital
+from gravity.simulation import G
+from gravity.simulation.transformations import state_to_orbital
 
 
 def timer(func):

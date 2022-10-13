@@ -1,10 +1,11 @@
-from flask import url_for, flash, redirect, render_template, request, Blueprint
-from flask_login import login_user, current_user, logout_user, login_required
-from werkzeug.security import check_password_hash, generate_password_hash
+from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_login import current_user, login_required, login_user, logout_user
 from gravity import db
 from gravity.database import User
-from gravity.users.forms import RegistrationForm, LoginForm, ResetPasswordForm, RequestResetForm, UpdateAccountForm
-from gravity.users.utils import send_password_reset_email, save_picture
+from gravity.users.forms import (LoginForm, RegistrationForm, RequestResetForm,
+                                 ResetPasswordForm, UpdateAccountForm)
+from gravity.users.utils import save_picture, send_password_reset_email
+from werkzeug.security import check_password_hash, generate_password_hash
 
 users = Blueprint('users', __name__)
 

@@ -1,12 +1,14 @@
+import os
+from flask import current_app
 from typing import Iterable
 import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 from scipy.integrate import solve_ivp
 
-from __init__ import M_E, R_E, G
-from helpers import central_body_altitude, equation, period
-from transformations import orbital_to_state, state_to_orbital
+from gravity.simulation import M_E, R_E
+from gravity.simulation.helpers import central_body_altitude, equation, period
+from gravity.simulation.transformations import orbital_to_state, state_to_orbital
 
 
 class Body:
@@ -116,13 +118,14 @@ class Body:
         return f"{self.__class__.__name__}('{self.pos}', '{self.vel}')"
 
 
-def plot_satelites(sat_list: Iterable[object], view_angle: Iterable[float] = (30, -45), save=False):
-    central_body = sat_list[0].central_body
-    for satelite in sat_list:
-        if satelite.central_body is not central_body:
-            raise ValueError('All satelites are required to have the same central body')
+def plot_satelites(sat_list: Iterable[object], view_angle: Iterable[float] = (30, -45), save=False, filename='temp'):
+    if len(sat_list) > 0:
+        central_body = sat_list[0].central_body
+        for satelite in sat_list:
+            if satelite.central_body is not central_body:
+                raise ValueError('All satelites are required to have the same central body')
     
-    ##### plot setup
+    ########## Plot setup ##########
     # Creating spherical central body to plot
     N = 50
     phi = np.linspace(0, 2 * np.pi, N)
@@ -133,15 +136,16 @@ def plot_satelites(sat_list: Iterable[object], view_angle: Iterable[float] = (30
     Y_c = central_body.radius * np.sin(phi) * np.sin(theta)
     Z_c = central_body.radius * np.cos(theta)
 
-    # Plotting Earth and Orbit
+    # Plotting Earth
     fig = plt.figure()
     ax = plt.axes(projection='3d')
     ax.plot_surface(X_c, Y_c, Z_c, color='green', alpha=0.5)
-    # View angle
-    ax.view_init(*view_angle)
-
+    # and Orbit
     for satelite in sat_list:
         satelite.plot(show=False, fig_ref=ax)
+
+    # View angle
+    ax.view_init(*view_angle)
     
     # Legend
     plt.title('Orbits around Earth')
@@ -154,23 +158,28 @@ def plot_satelites(sat_list: Iterable[object], view_angle: Iterable[float] = (30
     XYZlim = np.asarray([min(xyzlim[0]), max(xyzlim[1])])
     ax.set_xlim3d(XYZlim)
     ax.set_ylim3d(XYZlim)
-    ax.set_zlim3d(XYZlim * 3/4)
-
-    plt.show()
+    ax.set_zlim3d(XYZlim * 3 / 4)
 
     if save:
-        return 'saved'
+        plot_path = os.path.join(current_app.root_path, 'static/orbit_plots', filename)
+        plt.savefig(plot_path)
+        return plot_path
+    else:
+        plt.show()
 
 
 # position Earth at the origin
 Earth = Body(mass=M_E, radius=R_E)
 
-# Satelite1 = Body([R_E * 2, 0, 0], [0, 7, 0], central_body=Earth)
-# Satelite2 = Body([0, R_E * 2, 0], [0, 0, 6], central_body=Earth)
-# Satelite3 = Body([0, R_E * 2, R_E * 2], [0, 0, 6], central_body=Earth)
-# plot_satelites([Satelite1, Satelite2, Satelite3])
+# LEO
+Satelite1 = Body([R_E + 200, 0, 0], [0, 7.79, 0], central_body=Earth)
+# GEO
+Satelite2 = Body([0, 42_164, 0], [3.0746, 0, 0], central_body=Earth)
+# Showcase
+Satelite3 = Body([R_E * 1.5, R_E * 1.5, -R_E * 0.5], [2.5, -4.5, -1], central_body=Earth)
+# plot_satelites([Satelite3,])
 
 # Sat1 = Body([10000, 0, 0], [0, 7.0, 0], central_body=Earth)
 # Sat1.plot()
-Sat2 = Body([0, 10000, 0], [2, 3, 5], central_body=Earth)
-Sat2.plot()
+# Sat2 = Body([0, 10000, 0], [2, 3, 5], central_body=Earth)
+# Sat2.plot()

@@ -1,5 +1,5 @@
 import numpy as np
-from __init__ import G
+from gravity.simulation import G
 
 
 def rotationMatrix(axis, angle):
