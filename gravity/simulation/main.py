@@ -161,9 +161,10 @@ def plot_satelites(sat_list: Iterable[object], view_angle: Iterable[float] = (30
     ax.set_zlim3d(XYZlim * 3 / 4)
 
     if save:
-        plot_path = os.path.join(current_app.root_path, 'static/orbit_plots', filename)
+        plot_path = os.path.join(current_app.root_path, 'static\orbit_plots', filename)
         plt.savefig(plot_path)
-        return plot_path
+        # by default savefig saves as png, this could be done in a better way
+        return plot_path + '.png'
     else:
         plt.show()
 

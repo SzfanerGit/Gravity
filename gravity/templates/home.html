@@ -12,11 +12,13 @@
         </div>
         <div class="row">
             <div class="col-sm-9">
+                <!-- Plot -->
                 <div class="row d-flex justify-content-center">
                     <img class="plot-image px-5" src="{{ plot_image }}">
                 </div>
-                <div class="row">
-                    {% if current_user.is_authenticated %}
+                <!-- Table with satelites owned by user -->
+                {% if current_user.is_authenticated %}
+                    <div class="row">
                         <div class="row my-5">
                             <div class="table-responsive">
                                 <table class="table table-striped">
@@ -31,20 +33,21 @@
                                     <tbody>
                                         {% for row in user_satelites %}
                                             <tr>
-                                                <td>{{ name }}</td>
-                                                <td>{{ pos_0 }}</td>
-                                                <td>{{ vel_0 }}</td>
-                                                <th>DeleteBtn</th>
+                                                <td>{{ row.name }}</td>
+                                                <td>{{ row.pos_0 }}</td>
+                                                <td>{{ row.vel_0 }}</td>
+                                                <td>DeleteBtn</td>
                                             </tr>
                                         {% endfor %}
                                     </tbody>
                                 </table>
                             </div> 
                         </div>
-                    {% endif %}
-                </div>
+                    </div>
+                {% endif %}
             </div>
             <div class="col-sm-3">
+                <!-- Form to add satelites -->
                 <form method="POST" action="">
                     <!-- Security related -->
                     {{ form.hidden_tag() }}
@@ -98,6 +101,34 @@
                         {{ form.submit(class="btn btn-outline-info") }}
                     </div>
                 </form>
+                <!-- Form plot all satelites -->
+                {% if current_user.is_authenticated %}
+                    <form method="POST" action="">
+                        <!-- Security related -->
+                        {{ plot_form.hidden_tag() }}
+                
+                        <fieldset class="form-group">
+                            <legend class="border-bottom border-dark mb-4">Generate Plot</legend>
+                            <div class="form-group">
+                                {{ plot_form.view_angles.label(class="form-control-label") }}
+                                <!-- Handle messages to users about wrong information -->
+                                {% if plot_form.view_angles.errors %}
+                                    {{ plot_form.view_angles(class="form-control form-control-lg is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in plot_form.view_angles.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ plot_form.view_angles(class="form-control form-control-lg") }}
+                                {% endif %}
+                            </div>
+                        </fieldset>
+                        <div class="form-group">
+                            {{ plot_form.submit(class="btn btn-outline-info") }}
+                        </div>
+                    </form>
+                {% endif %}
             </div>
         </div>
     </div>    

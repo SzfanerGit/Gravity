@@ -35,15 +35,17 @@ def home():
             p_name = save_trans_plot(p_path, random=False)
             plot_image = url_for('static', filename='orbit_plots/' + p_name)
 
+    plot_form = GeneratePlotForm()
+    # get satelites owned by the user
+    try:
+        user_satelites = Satelite.query.filter_by(user_id=current_user.id)
+    except:
+        user_satelites = []
     # logged in user can generate all satelites and change view angle here
     if current_user.is_authenticated:
-        # get satelites owned by the user
-        user_satelites = Satelite.query.filter_by(user_id=current_user.id)
-
-        plot_form = GeneratePlotForm()
         if plot_form.validate_on_submit():
             # Formating: view angles
-            v_angle = convert_to_list(plot_form.view_angles.data)
+            v_angle = convert_to_list(plot_form.view_angles.data, target=2)
             # and satelites to plot
             sats = []
             for satelite in user_satelites:

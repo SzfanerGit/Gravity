@@ -22,7 +22,6 @@ def save_trans_plot(plot_path, random=True):
 
     newData = []
     for item in datas:
-        print(item[:3])
         if item[:3] == (255, 255, 255):  # white colour
             # replacing it with a transparent value
             newData.append((255, 255, 255, 0))
@@ -35,13 +34,13 @@ def save_trans_plot(plot_path, random=True):
 
     return plot_name
 
-def convert_to_list(string: str) -> List[float]:
+def convert_to_list(string: str, target=3) -> List[float]:
     message = 'wrong format, example str: "1, 1, 1"'
     try:
         list = (string).replace(' ', '').split(',')
         list = [float(x) for x in list]
     except:
         raise ValueError(message)
-    if len(list) != 3 or len(list) != 2:
+    if len(list) != target:
         raise ValueError(message)
     return list
