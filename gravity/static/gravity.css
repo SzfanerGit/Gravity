@@ -1,5 +1,6 @@
 :root {
     --btnColor: hsl(120, 85%, 45%);
+    --btnDeleteColor: hsl(0, 100%, 65%);
 }
 
 body {
@@ -35,6 +36,16 @@ form .btn {
 form .btn:hover {
     background-color: var(--btnColor);
     border-color: var(--btnColor);
+}
+
+form .btn-delete {
+    color: var(--btnDeleteColor);
+    border-color: var(--btnDeleteColor);
+}
+
+form .btn-delete:hover {
+    background-color: var(--btnDeleteColor);
+    border-color: var(--btnDeleteColor);
 }
 
 .account-img {

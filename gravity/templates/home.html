@@ -8,7 +8,14 @@
     <div class="container">
         <div class="row mb-5">
             <h2>Usage</h2>
-            <p>Here goes usage description. It should not be too long but it might have a full paragrapg or two.</p>
+            <p> Login to your account in order to use the full scope of the website. </p>
+            <p> To add a satellite, fill in the form on the right side of the page with the following information:
+                Name, Initial position (in km), Initial velocity (in km/s). 
+                Make sure to enter the position and velocity in the correct units. </p>
+            <p> To view the table of satellites you have added, look at the table in the main section of the page. The table will show the name, initial position, and initial velocity of each satellite.
+                To generate a plot of all your satellites, enter the view angle (in degrees, both horizontal and vertical separated by a comma) in the form on the right side of the page and submit it. The plot will be displayed in the main section of the page.
+                To delete a satellite, locate it in the table and click the "Delete" button next to it. </p>
+            <p> Examples of reasonable values for satellites orbiting Earth include geostationary orbit (pos: 42164, 0, 0; vel: 0, 3.07, 0) and International Space Station orbit (pos: 6779, -3418, 4307; vel: 7.66, 0, 7.66)</p>            
         </div>
         <div class="row">
             <div class="col-sm-9">
@@ -25,8 +32,8 @@
                                     <thead>
                                         <tr>
                                             <th>Name</th>
-                                            <th>Initial position</th>
-                                            <th>Initial velocity</th>
+                                            <th>Initial position [km]</th>
+                                            <th>Initial velocity [km/s]</th>
                                             <th>Delete</th>
                                         </tr>
                                     </thead>
@@ -36,7 +43,11 @@
                                                 <td>{{ row.name }}</td>
                                                 <td>{{ row.pos_0 }}</td>
                                                 <td>{{ row.vel_0 }}</td>
-                                                <td>DeleteBtn</td>
+                                                <td>
+                                                    <form action="{{ url_for('main.delete_satelite', satelite_id=row.id) }}" method="POST">
+                                                        <input class="btn btn-delete btn-sm" type="submit" value="Delete">
+                                                    </form> 
+                                                </td>
                                             </tr>
                                         {% endfor %}
                                     </tbody>

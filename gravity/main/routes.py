@@ -1,6 +1,6 @@
 from unicodedata import name
-from flask import Blueprint, flash, redirect, render_template, request, url_for
-from flask_login import current_user
+from flask import Blueprint, flash, redirect, render_template, request, url_for, abort
+from flask_login import current_user, login_required
 from gravity import db
 from gravity.database import Satelite, Plot
 from gravity.main.forms import AddSateliteForm, GeneratePlotForm
@@ -41,6 +41,7 @@ def home():
         user_satelites = Satelite.query.filter_by(user_id=current_user.id)
     except:
         user_satelites = []
+
     # logged in user can generate all satelites and change view angle here
     if current_user.is_authenticated:
         if plot_form.validate_on_submit():
@@ -65,6 +66,22 @@ def home():
 
     return render_template('home.html', form=form, plot_form=plot_form, 
                            user_satelites=user_satelites, plot_image=plot_image)
+
+
+@main.route("/satelite/<int:satelite_id>/delete", methods=['POST'])
+@login_required
+def delete_satelite(satelite_id):
+    satelite = Satelite.query.get_or_404(satelite_id)
+    # .owner is a backref to the user data (lookup in database.py User)
+    if satelite.owner != current_user:
+        abort(403)
+    db.session.delete(satelite)
+    db.session.commit()
+    flash('Satelite was deleted from the list!', 'success')
+
+    return redirect(url_for('main.home'))
+
+
 
 
 @main.route("/about")

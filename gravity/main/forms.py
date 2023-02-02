@@ -40,3 +40,7 @@ class GeneratePlotForm(FlaskForm):
             raise ValidationError('Angle has to be in the format: "a, b" ,where values are numbers. Example: 30, 45')
         if len(pos_list) != 2:
             raise ValidationError('need to have 2 elements (separated by comas)')
+
+
+class DeleteSateliteForm(FlaskForm):
+    delete = SubmitField('Delete')
